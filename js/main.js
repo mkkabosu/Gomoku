@@ -6,14 +6,19 @@ function main() {
   Y_LINES = 4;
   X_OFFSET = 10;
   Y_OFFSET = 10;
+  isWhite = true;
   UNIT = 24;
-  cvs.width = X_LINES * UNIT + X_OFFSET+3; 
-  cvs.height = Y_LINES * UNIT + Y_OFFSET+3; 
+  cvs.width = X_LINES * UNIT + X_OFFSET+UNIT; 
+  cvs.height = Y_LINES * UNIT + Y_OFFSET+UNIT; 
   init();
-  cvs.onClick = (function(){
-  	console.log("e");
-  })();
+  cvs.onclick= function(e){
+    var x = Math.floor((e.clientX-X_OFFSET)/UNIT);
+    var y = Math.floor((e.clientY-Y_OFFSET)/UNIT);
+    setStone(x,y,isWhite);
+    isWhite = !isWhite;
+  };
 }
+
 
 function init() {
   ctx.lineWidth = 1;
@@ -30,6 +35,10 @@ function init() {
 
   ctx.closePath();
   ctx.stroke();
+}
+
+function check() {
+ 
 }
 
 
