@@ -20,9 +20,21 @@ function main() {
     var result = check();
     if(result == 1)console.log("White WIN!"); 
     if(result == -1)console.log("Black WIN!"); 
+    if(!isWhite)randomAI();
   };
 }
 
+function randomAI() {
+  var i = 0;
+  while(i < X_LINES * Y_LINES &&
+    setStone(
+    Math.floor(Math.random()*(X_LINES+1)), 
+    Math.floor(Math.random()*(Y_LINES+1)),
+    isWhite) == -2){
+     console.log("guess...");
+      i++;
+    }
+}
 
 function init() {
   ctx.lineWidth = 1;
