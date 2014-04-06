@@ -33,5 +33,7 @@ function setStone(x,y,isWhite) {
   ctx.beginPath();
   ctx.arc(x*UNIT+X_OFFSET,y*UNIT+Y_OFFSET,UNIT/3,0,Math.PI*2,false);
   ctx.closePath();
+  ctx.fillStyle = isWhite ? "white" : "black";
   ctx.fill();
+  ctx.stroke();
 }
