@@ -16,9 +16,9 @@ function main() {
     var y = Math.floor((e.clientY-Y_OFFSET)/UNIT);
     setStone(x,y,isWhite);
     isWhite = !isWhite;
-
   };
 }
+
 
 function init() {
   ctx.lineWidth = 1;
@@ -35,6 +35,10 @@ function init() {
 
   ctx.closePath();
   ctx.stroke();
+}
+
+function check() {
+ 
 }
 
 
