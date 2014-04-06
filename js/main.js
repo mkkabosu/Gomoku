@@ -20,7 +20,9 @@ function main() {
     var result = check();
     if(result == 1)console.log("White WIN!"); 
     if(result == -1)console.log("Black WIN!"); 
+    setTimeout(function(){
     if(!isWhite)randomAI();
+    },400);
   };
 }
 
