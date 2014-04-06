@@ -17,11 +17,26 @@ function main() {
     var x = Math.floor((e.clientX-X_OFFSET)/UNIT);
     var y = Math.floor((e.clientY-Y_OFFSET)/UNIT);
     setStone(x,y,isWhite);
-    isWhite = !isWhite;
-    check();
+    var result = check();
+    if(result == 1)console.log("White WIN!"); 
+    if(result == -1)console.log("Black WIN!"); 
+    setTimeout(function(){
+    if(!isWhite)randomAI();
+    },400);
   };
 }
 
+function randomAI() {
+  var i = 0;
+  while(i < X_LINES * Y_LINES &&
+    setStone(
+    Math.floor(Math.random()*(X_LINES+1)), 
+    Math.floor(Math.random()*(Y_LINES+1)),
+    isWhite) == -2){
+     console.log("guess...");
+      i++;
+    }
+}
 
 function init() {
   ctx.lineWidth = 1;
@@ -60,8 +75,8 @@ function check() {
     for(i in row){
       sum+= row[i];
     }
-    if(sum > 4)console.log("White WIN!!!");
-    if(sum < -4)console.log("BLACK WIN!!!");
+    if(sum > 4)return 1;
+    if(sum < -4)return -1;
   }
 
   for(var x = 0; x<=X_LINES; ++x){
@@ -69,50 +84,49 @@ function check() {
     for(var y = 0; y <= Y_LINES; ++y){
       sum += STONELIST[y][x]; 
     }
-    if(sum > 4)console.log("White WIN!!!");
-    if(sum < -4)console.log("BLACK WIN!!!");
+    if(sum > 4)return 1;
+    if(sum < -4)return -1;
   }
 
   for(var x = 0; x<= X_LINES; ++x){
     sum = countup(x,0,1,1); 
-    if(sum > 4)console.log("White WIN!!!");
-    if(sum < -4)console.log("BLACK WIN!!!");
+    if(sum > 4)return 1;
+    if(sum < -4)return -1;
   }
 
   for(var x = 0; x<= X_LINES; ++x){
     sum = countup(x,0,-1,1); 
-    if(sum > 4)console.log("White WIN!!!");
-    if(sum < -4)console.log("BLACK WIN!!!");
+    if(sum > 4)return 1;
+    if(sum < -4)return -1;
   }
 
   for(var y = 0; y<= Y_LINES; ++y){
     sum = countup(0,y,1,1); 
-    if(sum > 4)console.log("White WIN!!!");
-    if(sum < -4)console.log("BLACK WIN!!!");
+    if(sum > 4)return 1;
+    if(sum < -4)return -1;
   }
 
   for(var y = 0; y<= Y_LINES; ++y){
     sum = countup(X_LINES,y,-1,1); 
-    if(sum > 4)console.log("White WIN!!!");
-    if(sum < -4)console.log("BLACK WIN!!!");
+    if(sum > 4)return 1;
+    if(sum < -4)return -1;
   }
-}
-
-function checkSlantLine() {
+  return 0;
 }
 
 function countup(x,y,dx,dy) {
   if(x < 0 || x > X_LINES || y < 0 || y > Y_LINES)return 0; 
   else return STONELIST[y][x] + countup(x+dx,y+dy,dx,dy);    
-
 }
 
-function setStone(x,y,isWhite) {
+function setStone(x,y,_isWhite) {
+  if(STONELIST[y][x] != 0) return -2;
   ctx.beginPath();
   ctx.arc(x*UNIT+X_OFFSET,y*UNIT+Y_OFFSET,UNIT/3,0,Math.PI*2,false);
   ctx.closePath();
-  ctx.fillStyle = isWhite ? "white" : "black";
+  ctx.fillStyle = _isWhite ? "white" : "black";
   ctx.fill();
   ctx.stroke();
   STONELIST[y][x] = isWhite ? 1 : -1;
+  isWhite = !isWhite;
 }
