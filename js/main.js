@@ -17,7 +17,6 @@ function main() {
     var x = Math.floor((e.clientX-X_OFFSET)/UNIT);
     var y = Math.floor((e.clientY-Y_OFFSET)/UNIT);
     setStone(x,y,isWhite);
-    isWhite = !isWhite;
     check();
   };
 }
@@ -98,21 +97,19 @@ function check() {
   }
 }
 
-function checkSlantLine() {
-}
-
 function countup(x,y,dx,dy) {
   if(x < 0 || x > X_LINES || y < 0 || y > Y_LINES)return 0; 
   else return STONELIST[y][x] + countup(x+dx,y+dy,dx,dy);    
-
 }
 
-function setStone(x,y,isWhite) {
+function setStone(x,y,_isWhite) {
+  if(STONELIST[y][x] != 0) return 0;
   ctx.beginPath();
   ctx.arc(x*UNIT+X_OFFSET,y*UNIT+Y_OFFSET,UNIT/3,0,Math.PI*2,false);
   ctx.closePath();
-  ctx.fillStyle = isWhite ? "white" : "black";
+  ctx.fillStyle = _isWhite ? "white" : "black";
   ctx.fill();
   ctx.stroke();
   STONELIST[y][x] = isWhite ? 1 : -1;
+  isWhite = !isWhite;
 }
