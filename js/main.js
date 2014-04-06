@@ -7,32 +7,65 @@ function main() {
   X_OFFSET = 10;
   Y_OFFSET = 10;
   UNIT = 24;
-  cvs.width = X_LINES * UNIT + X_OFFSET+3; 
-  cvs.height = Y_LINES * UNIT + Y_OFFSET+3; 
+  isWhite = true;
+
+
+
+  cvs.width = X_LINES * UNIT + X_OFFSET+UNIT; 
+  cvs.height = Y_LINES * UNIT + Y_OFFSET+UNIT; 
   init();
-  cvs.onClick = (function(){
-  	console.log("e");
-  })();
+  cvs.onclick = function(e){
+  	var x = Math.floor(e.clientX/UNIT);
+  	var y = Math.floor(e.clientY/UNIT);
+  	console.log(x,y);
+  	setStone(x,y,isWhite);
+  	isWhite = !isWhite;
+  	var result = check();
+  	if(result == 1)console.log("White WIN!!");
+  	if(result ==　-1)console.log("Black WIN!!");
+  };
 }
 
 function init() {
   ctx.lineWidth = 1;
   ctx.beginPath();
-  for(var y = 0; y<= Y_LINES;++y){
+  for(var y = 0; y<=Y_LINES;++y){
     ctx.moveTo(X_OFFSET,y*UNIT+Y_OFFSET);
     ctx.lineTo(X_OFFSET+X_LINES*UNIT,y*UNIT+Y_OFFSET);
   }
 
-  for(var x = 0; x<= X_LINES;++x){
-    ctx.moveTo(X_OFFSET+x*UNIT,Y_OFFSET);
+  for(var x = 0;x<=X_LINES;++x){
+   	ctx.moveTo(X_OFFSET+x*UNIT,Y_OFFSET);
     ctx.lineTo(X_OFFSET+x*UNIT,Y_LINES*UNIT+Y_OFFSET);
   }
-
   ctx.closePath();
   ctx.stroke();
+  stoneListInit();
 }
 
+function stoneListInit(){
+	var res = [];
+	for(var y = 0;y <= Y_LINES;++y){
+		var r =[];
+		for(var x = 0;x <= X_LINES;++x){
+			r.push(0);
+		}
+		res.push(r);
+	}
+	STONELIST = res;
+}
 
+function check(){
+	for(var y = 0;y <= Y_LINES;++y){
+		var row = STONELIST[y];
+		var sum = 0;
+		for(i in row){
+			sum += row[i];
+		}
+		if(sum > 4) return 1;
+		if(sum < -4) return -1;
+	}
+}
 
 function setStone(x,y,isWhite) {
   ctx.beginPath();
@@ -41,4 +74,5 @@ function setStone(x,y,isWhite) {
   ctx.fillStyle = isWhite ? "white" : "black";
   ctx.fill();
   ctx.stroke();
+  STONELIST[y][x] = isWhite ? 1 : -1;
 }
