@@ -10,6 +10,9 @@ function main() {
   cvs.width = X_LINES * UNIT + X_OFFSET+3; 
   cvs.height = Y_LINES * UNIT + Y_OFFSET+3; 
   init();
+  cvs.onClick = (function(){
+  	console.log("e");
+  })();
 }
 
 function init() {
@@ -28,6 +31,8 @@ function init() {
   ctx.closePath();
   ctx.stroke();
 }
+
+
 
 function setStone(x,y,isWhite) {
   ctx.beginPath();
