@@ -8,6 +8,8 @@ function main() {
   Y_OFFSET = 10;
   isWhite = true;
   UNIT = 24;
+
+
   cvs.width = X_LINES * UNIT + X_OFFSET+UNIT; 
   cvs.height = Y_LINES * UNIT + Y_OFFSET+UNIT; 
   init();
@@ -16,6 +18,7 @@ function main() {
     var y = Math.floor((e.clientY-Y_OFFSET)/UNIT);
     setStone(x,y,isWhite);
     isWhite = !isWhite;
+    check();
   };
 }
 
@@ -35,13 +38,74 @@ function init() {
 
   ctx.closePath();
   ctx.stroke();
+  stoneListInit();
+}
+
+function stoneListInit() {
+  var res = [];
+  for(var y = 0; y <= Y_LINES; ++y){
+    var r = [];
+    for(var x = 0;x<=X_LINES;++x){
+      r.push(0);
+    }
+    res.push(r);
+  }
+  STONELIST = res;
 }
 
 function check() {
- 
+  for(var y = 0; y<=Y_LINES; ++y){
+    var row = STONELIST[y]; 
+    var sum = 0;
+    for(i in row){
+      sum+= row[i];
+    }
+    if(sum > 4)console.log("White WIN!!!");
+    if(sum < -4)console.log("BLACK WIN!!!");
+  }
+
+  for(var x = 0; x<=X_LINES; ++x){
+    var sum = 0;
+    for(var y = 0; y <= Y_LINES; ++y){
+      sum += STONELIST[y][x]; 
+    }
+    if(sum > 4)console.log("White WIN!!!");
+    if(sum < -4)console.log("BLACK WIN!!!");
+  }
+
+  for(var x = 0; x<= X_LINES; ++x){
+    sum = countup(x,0,1,1); 
+    if(sum > 4)console.log("White WIN!!!");
+    if(sum < -4)console.log("BLACK WIN!!!");
+  }
+
+  for(var x = 0; x<= X_LINES; ++x){
+    sum = countup(x,0,-1,1); 
+    if(sum > 4)console.log("White WIN!!!");
+    if(sum < -4)console.log("BLACK WIN!!!");
+  }
+
+  for(var y = 0; y<= Y_LINES; ++y){
+    sum = countup(0,y,1,1); 
+    if(sum > 4)console.log("White WIN!!!");
+    if(sum < -4)console.log("BLACK WIN!!!");
+  }
+
+  for(var y = 0; y<= Y_LINES; ++y){
+    sum = countup(X_LINES,y,-1,1); 
+    if(sum > 4)console.log("White WIN!!!");
+    if(sum < -4)console.log("BLACK WIN!!!");
+  }
 }
 
+function checkSlantLine() {
+}
 
+function countup(x,y,dx,dy) {
+  if(x < 0 || x > X_LINES || y < 0 || y > Y_LINES)return 0; 
+  else return STONELIST[y][x] + countup(x+dx,y+dy,dx,dy);    
+
+}
 
 function setStone(x,y,isWhite) {
   ctx.beginPath();
@@ -50,4 +114,5 @@ function setStone(x,y,isWhite) {
   ctx.fillStyle = isWhite ? "white" : "black";
   ctx.fill();
   ctx.stroke();
+  STONELIST[y][x] = isWhite ? 1 : -1;
 }
