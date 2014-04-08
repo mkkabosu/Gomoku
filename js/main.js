@@ -20,9 +20,7 @@ function main() {
   	console.log(x,y);
   	setStone(x,y,isWhite);
   	isWhite = !isWhite;
-  	var result = check();
-  	if(result == 1)console.log("White WIN!!");
-  	if(result ==　-1)console.log("Black WIN!!");
+  	check();
   };
 }
 
@@ -62,9 +60,18 @@ function check(){
 		for(i in row){
 			sum += row[i];
 		}
-		if(sum > 4) return 1;
-		if(sum < -4) return -1;
+		if(sum > 4)console.log("White WIN!!");
+		if(sum < -4)console.log("Black WIN!!");
 	}
+
+  for(var x = 0;x <= X_LINES;++x){
+    var sum = 0;
+    for(var y = 0;y <= Y_LINES;++y){
+      sum += STONELIST[y][x];
+    }
+    if(sum > 4)console.log("White WIN!!");
+    if(sum < -4)console.log("Black WIN!!");
+  }
 }
 
 function setStone(x,y,isWhite) {
